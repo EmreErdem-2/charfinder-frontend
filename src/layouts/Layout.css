@@ -1,0 +1,72 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+.app-content {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.tab-nav {
+  display: flex;
+  border-bottom: 1px solid #333;
+  background-color: #1a1a1a;
+}
+
+.tab-link {
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  color: #ccc;
+  background-color: #1a1a1a;
+  border: 1px solid transparent;
+  border-bottom: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tab-link:hover {
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.tab-link.active {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #333;
+  border-bottom: 2px solid #000;
+  border-radius: 6px 6px 0 0;
+  font-weight: bold;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem;
+  background-color: #111;
+  border-bottom: 1px solid #333;
+}
+
+.nav-link {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #fff;
+}
+
+.nav-link.active {
+  color: #fff;
+  border-bottom: 2px solid #fff;
+}
+
