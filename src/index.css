@@ -1,8 +1,0 @@
-/* Reset root-level spacing */
-html, body, #root {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  background-color: #000; /* 👈 full black background */
-}
