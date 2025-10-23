@@ -8,3 +8,19 @@ export const fetchAllData = async (type) => {
 };
 
 
+
+export function generalFetch(url, path, collection, filter, fields, page, pageSize) {
+  return fetch(`${url}${path}${collection}?filter=${filter}&fields=${fields}&page=${page}&pageSize=${pageSize}`)
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then(json => ({
+      data: json.data,
+      metadata: { totalCount: json.metadata.totalCount,
+                    page: json.metadata.page,
+                    pageSize: json.metadata.pageSize
+       }
+    }))
+    .catch(err => console.error("Fetch error: ", error));
+}

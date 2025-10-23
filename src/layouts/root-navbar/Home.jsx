@@ -1,5 +1,8 @@
 import {Link} from "react-router-dom"
 import './Home.css'; // optional: for styling
+import CollapsibleList from "../../components/CollapsibleList";
+import { fetchFeatsPage } from "../../services/usePagination";
+
 
 const Home = () => {
   return (
@@ -25,6 +28,16 @@ const Home = () => {
             <li><Link to="/saved">💾 Load Saved Characters</Link></li>
             </ul>
         </section>
+
+        <div style={{ maxWidth: 480 }}>
+        <h3>Choose Feat</h3>
+        <CollapsibleList
+            fetchPage={fetchFeatsPage}
+            pageSize={8}
+            placeholder="Pick a feat"
+            initiallyOpen={false}
+        />
+        </div>
 
         <footer className="home-footer">
             <p>Built for Pathfinder fans. Not affiliated with Paizo.</p>

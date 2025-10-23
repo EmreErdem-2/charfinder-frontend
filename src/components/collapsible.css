@@ -1,0 +1,35 @@
+.collapsible { font-family: Arial, sans-serif; }
+.collapsible-toggle {
+  width: 100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 8px 12px;
+  border:1px solid #ddd;
+  background:#fff;
+  cursor:pointer;
+}
+.collapsible-title { font-weight:600; }
+.collapsible-panel {
+  border:1px solid #eee;
+  border-top: none;
+  padding:8px;
+  background:#fafafa;
+}
+.collapsible-actions { display:flex; gap:6px; align-items:center; margin-bottom:8px; }
+.collapsible-list { list-style:none; padding:0; margin:0; max-height:240px; overflow:auto; }
+.collapsible-list-item { margin:0; }
+.item-button {
+  width:100%;
+  text-align:left;
+  padding:8px;
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+.item-button:hover { background:#fff; }
+.item-button.selected { background:#e6f0ff; }
+.collapsible-loading, .collapsible-error, .collapsible-empty { padding:8px; color:#666; }
