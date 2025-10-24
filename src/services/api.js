@@ -9,8 +9,8 @@ export const fetchAllData = async (type) => {
 
 
 
-export function generalFetch(url, path, collection, filter, fields, page, pageSize) {
-  return fetch(`${url}${path}${collection}?filter=${filter}&fields=${fields}&page=${page}&pageSize=${pageSize}`)
+export function generalFetch(url, path, collection, filter, fields, sort, page, pageSize) {
+  return fetch(`${url}${path}${collection}?filter=${filter}&fields=${fields}&sort=${sort}&page=${page}&pageSize=${pageSize}`)
     .then(res => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();

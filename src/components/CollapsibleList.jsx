@@ -11,6 +11,10 @@ import "./collapsible.css";
  */
 export default function CollapsibleList({
   fetchPage,
+  collection="feats",
+  filter="deprecated!=true",
+  fields="id,name,rarity,description,deprecated",
+  sort,
   pageSize = 10,
   placeholder = "Select an item",
   initiallyOpen = false,
@@ -28,7 +32,7 @@ export default function CollapsibleList({
     goToPage,   // Promise-returning
     refresh,    // Promise-returning
     pageCount,
-  } = usePagination(fetchPage, pageSize);
+  } = usePagination(fetchPage, collection, filter, fields, sort, pageSize);
 
   // close on outside click
   const rootRef = useRef();
@@ -108,9 +112,10 @@ export default function CollapsibleList({
                   type="button"
                   className={`item-button ${selected?.id === it.id ? "selected" : ""}`}
                   onClick={() => handleSelect(it)}
+                  style={it.rarity!="COMMON"?{background:'yellow'}:{background:'grey'}}
                 >
                   <div className="item-name">{it.name}</div>
-                  <div className="item-meta">{it.meta ?? ""}</div>
+                  <div className="item-meta">{it.level ?? ""}</div>
                 </button>
               </li>
             ))}

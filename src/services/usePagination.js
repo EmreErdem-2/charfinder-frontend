@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { generalFetch } from "./api";
 
-export default function usePagination(fetcher, pageSize = 10) {
+export default function usePagination(fetcher, collection, filter, fields, sort, pageSize = 10) {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [items, setItems] = useState([]);
@@ -23,7 +23,7 @@ export default function usePagination(fetcher, pageSize = 10) {
     setLoading(true);
     setError(null);
 
-    return fetcher(target, pageSize)
+    return fetcher(target, collection, filter, fields, sort, pageSize)
       .then((result) => {
         console.log("Result from fetcher:", result);
         console.log("current", current, "reqId.current", reqId.current);
@@ -67,13 +67,13 @@ export default function usePagination(fetcher, pageSize = 10) {
 }
 
 
-export function fetchFeatsPage(page, pageSize) {
-    const url = "http://localhost:8080";
+export function fetchCollectionsPaged(page, collection, filter, fields, sort, pageSize) {
+    const url = "http://localhost:5000";
     const path = "/api/rules/search/";
-    const collection = "feats";
-    const filter = "deprecated!=true";
-    const fields = "id,name,rarity,deprecated";
-  return generalFetch(url, path, collection, filter, fields, page, pageSize);
+    // const collection = "feats";
+    // const filter = "deprecated!=true";
+    // const fields = "id,name,rarity,deprecated";
+  return generalFetch(url, path, collection, filter, fields, sort, page, pageSize);
 }
 
 
