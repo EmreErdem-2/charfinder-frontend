@@ -4,19 +4,18 @@ import { Routes, Route } from 'react-router-dom';
 import RootLayout from './layouts/root-navbar/RootLayout';
 import Home from './layouts/root-navbar/Home';
 import Info from './layouts/root-navbar/Info';
-import Rules from './layouts/root-navbar/Rules';
+import Create from './layouts/root-navbar/Create';
 import Saved from './layouts/root-navbar/Saved';
+import Login from './layouts/root-navbar/Login';
 
-// Character Creation Group
-import CreateLayout from './layouts/create-tabs/CreateLayout';
-import Ancestry from './layouts/create-tabs/Ancestry';
-import Backgrounds from './layouts/create-tabs/Backgrounds';
-import Classes from './layouts/create-tabs/Classes';
-import Skills from './layouts/create-tabs/Skills';
-import Feats from './layouts/create-tabs/Feats';
-
-import { CreationProgressProvider } from './layouts/create-tabs/CreationProgressContext';
-
+// Rule Search Group
+import Rules from './layouts/rules-tabs/Rules';
+import RulesLayout from './layouts/rules-tabs/RulesLayout';
+import Ancestry from './layouts/rules-tabs/Ancestry';
+import Backgrounds from './layouts/rules-tabs/Backgrounds';
+import Classes from './layouts/rules-tabs/Classes';
+import Skills from './layouts/rules-tabs/Skills';
+import Feats from './layouts/rules-tabs/Feats';
 
 // Character Sheet Group
 import CharacterLayout from './layouts/character-tabs/CharacterLayout';
@@ -24,7 +23,6 @@ import Overview from './layouts/character-tabs/Overview';
 import Stats from './layouts/character-tabs/Stats';
 import Features from './layouts/character-tabs/Features';
 import Inventory from './layouts/character-tabs/Inventory';
-import Create from './layouts/create-tabs/Create';
 
 
 
@@ -34,12 +32,13 @@ const AppRoutes = () => (
     <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
         <Route path="info" element={<Info />} />
-        <Route path="rules" element={<Rules />} />
+        <Route path="create" element={<Create />} />
         <Route path="saved" element={<Saved />} />
+        <Route path="login" element={<Login />} />
 
-        {/* Character Creation Group */}
-        <Route path="/create" element={<CreationProgressProvider><CreateLayout /></CreationProgressProvider>}>
-            <Route index element={<Create />} />
+        {/* Rule search Group */}
+        <Route path="/rules" element={<RulesLayout />}>
+            <Route index element={<Rules />} />
             <Route path="backgrounds" element={<Backgrounds />} />
             <Route path="classes" element={<Classes />} />
             <Route path="ancestry" element={<Ancestry />} />

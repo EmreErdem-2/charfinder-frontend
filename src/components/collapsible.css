@@ -18,7 +18,14 @@
 }
 .collapsible-actions { display:flex; gap:6px; align-items:center; margin-bottom:8px; }
 .collapsible-list { list-style:none; padding:0; margin:0; max-height:240px; overflow:auto; }
-.collapsible-list-item { margin:0; }
+.collapsible-list-item { 
+    margin:0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.1rem; /* space between buttons */
+ 
+}
 .item-button {
   width:100%;
   text-align:left;
@@ -33,3 +40,12 @@
 .item-button:hover { background:#fff; }
 .item-button.selected { background:#e6f0ff; }
 .collapsible-loading, .collapsible-error, .collapsible-empty { padding:8px; color:#666; }
+.collapsible.disabled {
+  opacity: 0.5;
+  pointer-events: none; /* prevents clicks */
+  text-decoration: line-through;
+}
+.collapsible.disabled button {
+  cursor: not-allowed;
+  font-style: italic;
+}

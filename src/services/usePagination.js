@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { generalFetch } from "./api";
 
-export default function usePagination(fetcher, collection, filter, fields, sort, pageSize = 10) {
+export default function usePagination(fetcher, collection, filter, fields, sort, pageSize = 10, disabled=true, open=false) {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [items, setItems] = useState([]);
@@ -25,13 +25,10 @@ export default function usePagination(fetcher, collection, filter, fields, sort,
 
     return fetcher(target, collection, filter, fields, sort, pageSize)
       .then((result) => {
-        console.log("Result from fetcher:", result);
-        console.log("current", current, "reqId.current", reqId.current);
+        // console.log("current", current, "reqId.current", reqId.current);
         if (!mounted.current || current !== reqId.current) return;
-        console.log("arrived after mounted controls");
         setItems(result.data || []);
-        console.log("result.data: ", result.data);
-        console.log("data/items state: ", items); 
+        // console.log("result.data: ", result.data);
         setTotal(typeof result.metadata.totalCount === "number" ? result.metadata.totalCount : (result.data || []).length);
         setPage(target);
       })
@@ -42,10 +39,8 @@ export default function usePagination(fetcher, collection, filter, fields, sort,
       })
       .finally(() => {
         if (mounted.current && current === reqId.current) setLoading(false);
-        console.log("items: ", items);
-        //setLoading(false);
       });
-  }, [fetcher, pageSize]);
+  }, [fetcher,filter, pageSize]);
 
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
 
@@ -57,25 +52,11 @@ export default function usePagination(fetcher, collection, filter, fields, sort,
   const refresh = useCallback(() => loadPage(page), [loadPage, page]);
 
   useEffect(() => {
-    loadPage(1).catch((e) => {
-        console.log("initial load error: ",e);
-    }); // initial load
-  }, [loadPage]);
+    if(!disabled && open){
+        loadPage(1).catch((e) => {console.log("initial load error: ",e);}); // initial load
+    }
+  }, [disabled,open,loadPage]);
 
 
   return { page, total, items, loading, error, pageCount, loadPage, goToPage, refresh };
 }
-
-
-export function fetchCollectionsPaged(page, collection, filter, fields, sort, pageSize) {
-    const url = "http://localhost:5000";
-    const path = "/api/rules/search/";
-    // const collection = "feats";
-    // const filter = "deprecated!=true";
-    // const fields = "id,name,rarity,deprecated";
-  return generalFetch(url, path, collection, filter, fields, sort, page, pageSize);
-}
-
-
-
-//http://localhost:5000/api/rules/search/feats?filter=deprecated!=true&fields=id,name,rarity,deprecated&page=1&pageSize=10

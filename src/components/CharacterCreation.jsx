@@ -1,66 +1,64 @@
-import CollapsibleList from "./CollapsibleList"
-import { fetchCollectionsPaged } from "../services/usePagination";
-
-// ilk page load ettiğinde yalnızca ancestry fetch etmeli diğerleri etmemeli
-// bir önceki selected olduğunda, selected item'ın özel operation'ı var mı diye bakılır (extra feat skill seçme gibi)
-// varsa ona göre o operaiton'ın belirlediği kıstaslarda fetch eden bir collapsible list getirilir
-// selected seçilen bilgileri kaydedilir. Operational  bazı bilgileri char sheet state'ine kaydedilir
-// (sonradan char sheet için görsel alanı oluşturulacak ve render ettirilecek)
-// burada characterin seçtiği ancestery veya class gibi özelliklerin trait_id'leri ile bir sonraki adımlar fetchlenir
+import { useEffect, useState } from "react";
+import { steps } from "./StepConfig";  
+import { StepWizard } from "./StepWizard";
+import { fetchGeneratedBackstory } from "../services/api";
 
 
 export const CharacterCreation = () => {
-    return (
-        <>
-        <div style={{ maxWidth: 480 }}>
-        <CollapsibleList
-            fetchPage={fetchCollectionsPaged}
-            collection="ancestries"
-            filter="deprecated!=true"
-            fields="id,name,rarity,description,deprecated"
-            sort="name-asc"
-            pageSize={8}
-            placeholder="Choose an ancestry"
-            initiallyOpen={false}
-        />
-        </div>
-        <div style={{ maxWidth: 480 }}>
-        <CollapsibleList
-            fetchPage={fetchCollectionsPaged}
-            collection="classes"
-            filter="deprecated!=true"
-            fields="id,name,rarity,description,deprecated"
-            sort="name-asc"
-            pageSize={8}
-            placeholder="Choose a class"
-            initiallyOpen={false}
-        />
-        </div>
-        <div style={{ maxWidth: 480 }}>
-        <CollapsibleList
-            fetchPage={fetchCollectionsPaged}
-            collection="backgrounds"
-            filter="deprecated!=true"
-            fields="id,name,rarity,description,deprecated"
-            sort="name-asc"
-            pageSize={8}
-            placeholder="Choose a background"
-            initiallyOpen={false}
-        />
-        </div>
-        <div style={{ maxWidth: 480 }}>
-        <CollapsibleList
-            fetchPage={fetchCollectionsPaged}
-            collection="feats"
-            filter="deprecated!=true"
-            fields="id,name,rarity,level,description,deprecated"
-            sort="level-asc,name-asc"
-            pageSize={8}
-            placeholder="Choose a feat"
-            initiallyOpen={false}
-        />
-        </div>
+  const [character, setCharacter] = useState(null);
+  const [backstory, setBackstory] = useState("");
 
-        </>
-    );
-}
+  const handleCharacterChange = (charInfo) => {
+    const result = Object.entries(charInfo)
+      .filter(([_, o]) => o?.name)
+      .map(([key, o]) => ({
+        key,
+        name: o.name,
+        description: o.description ?? null,
+      }));
+
+    const json = JSON.stringify(result, null, 2);
+    setCharacter(json);
+    console.log("Character JSON: \n", json);
+  };
+
+  useEffect(() => {
+    console.log("char: ", character);
+  }, [character]);
+
+  async function generateBackstory() {
+    if (!character) {
+      alert("Please finish character creation first!");
+      return;
+    }
+
+    try {
+      const response = await fetchGeneratedBackstory(character)
+      setBackstory(response); // assume API returns { backstory: "..." }
+    } catch (err) {
+      console.error(err);
+      setBackstory("Error generating backstory.");
+    }
+  }
+
+
+  return (
+    <div>
+      <div>
+        <StepWizard steps={steps} onCharacterChange={handleCharacterChange} />
+      </div>
+
+      <button onClick={generateBackstory}>
+        Generate Backstory
+      </button>
+
+      {backstory && (
+        <div className="backstory">
+          <h3>Character Backstory</h3>
+          <p>{backstory}</p>
+        </div>
+      )}
+    </div>
+  );
+
+};

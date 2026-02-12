@@ -1,7 +1,5 @@
 import {Link} from "react-router-dom"
 import './Home.css'; // optional: for styling
-import CollapsibleList from "../../components/CollapsibleList";
-import { fetchCollectionsPaged } from "../../services/usePagination";
 import { CharacterCreation } from "../../components/CharacterCreation";
 
 
@@ -29,9 +27,7 @@ const Home = () => {
             <li><Link to="/saved">💾 Load Saved Characters</Link></li>
             </ul>
         </section>
-
-        <CharacterCreation/>        
-
+        
         <footer className="home-footer">
             <p>Built for Pathfinder fans. Not affiliated with Paizo.</p>
         </footer>

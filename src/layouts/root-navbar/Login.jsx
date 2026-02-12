@@ -1,8 +1,7 @@
-// src/components/Login.jsx
 import React, { useState } from "react";
-import { useAuth, decodeJwt } from "../auth/AuthContext";
-import { loginRequest } from "../auth/authApi";
-import { setAccessTokenModule } from "../auth/tokenModule";
+import { useAuth, decodeJwt } from "../../auth/AuthContext";
+import { loginRequest } from "../../auth/authApi";
+import { setAccessTokenModule } from "../../auth/tokenModule";
 
 export default function Login({ onSuccess }) {
   const { saveAccessToken } = useAuth();
