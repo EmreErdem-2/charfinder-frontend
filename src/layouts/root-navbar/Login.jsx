@@ -4,7 +4,7 @@ import { loginRequest } from "../../auth/authApi";
 import { setAccessTokenModule } from "../../auth/tokenModule";
 
 export default function Login({ onSuccess }) {
-  const { saveAccessToken } = useAuth();
+  //const { saveAccessToken } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
