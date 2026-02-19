@@ -1,12 +1,15 @@
 import AppRoutes from './AppRoutes';
 import './App.css';
 import HomeLayout from './layouts/root-navbar/RootLayout';
+import QueryProvider from './providers/QueryProvider';
 
 
 const App = () => (
   <>
-    <AppRoutes />
-    <HomeLayout />
+    <QueryProvider>
+      <AppRoutes />
+      <HomeLayout />
+    </QueryProvider>
   </>
 
 );
