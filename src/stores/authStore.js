@@ -1,5 +1,6 @@
-import { isAxiosError } from 'axios';
 import {create} from 'zustand';
+
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8080';
 
 const useAuthStore = create((set, get) => ({
     accessToken: null,
@@ -19,18 +20,42 @@ const useAuthStore = create((set, get) => ({
             user: userData
         });
     },
+    signup: async (email, password) => {
+        set({isLoading:true});
+        try{
+            const response = await fetch(`${API_BASE}/auth/signup`, {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({email,password}),
+                credentials: 'include'
+            });
+            if (!response.ok) throw new Error('Signup failed');
+            const data = await response.json();
+            set({
+                accessToken: data.accessToken,
+                user: data.user || null,
+                isAuthenticated: true,
+                isLoading: false
+            });
+        } catch (err) {
+            set({
+                isLoading: false
+            });
+            throw "signup error: " + err;
+        }
+    },
 
-    login: async (ElementInternals, password) => {
+    login: async (email, password) => {
         set({isLoading:true});
         try {
-            const response = await fetch('/api/auth/login',{ // api endpoint
+            const response = await fetch(`${API_BASE}/auth/login`,{
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({email, password}),
-                credentials: 'include' //sends cookies (for refresh token)
+                credentials: 'include'
             });
 
-            if (!response.ok) throw new ErrorĞ('Login failed');
+            if (!response.ok) throw new Error('Login failed');
             const data = await response.json();
             set({
                 accessToken: data.accessToken,
@@ -48,7 +73,7 @@ const useAuthStore = create((set, get) => ({
 
     logout: async () => {
         try{
-            await fetch('api/auth/logout', {
+            await fetch(`${API_BASE}/auth/logout`, {
                 method: 'POST',
                 credentials: 'include'
             })
@@ -65,7 +90,7 @@ const useAuthStore = create((set, get) => ({
 
     refreshAccessToken: async () => {
         try {
-            const response = await fetch('api/auth/refresh', {
+            const response = await fetch(`${API_BASE}/auth/refresh`, {
                 method: 'POST',
                 credentials: 'include'
             });

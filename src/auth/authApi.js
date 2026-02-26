@@ -1,34 +1,24 @@
 // src/auth/authApi.js
-import { setAccessTokenModule } from "./tokenModule";
-import { decodeJwt } from "./AuthContext";
+import {useAuthStore} from '../stores/authStore'
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8080";
+console.log("api_base: " + API_BASE);
 
-// login returns { accessToken } and server sets HttpOnly refresh cookie
-export async function loginRequest(email, password) {
-  const res = await fetch(`${API_BASE}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include", // allow server to set HttpOnly cookie
-    body: JSON.stringify({ email, password }),
+export const apiFetch = async (url, options = {}) => {
+  const token = useAuthStore.getState().accessToken;
+  
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers
+  };
+
+  if(token) headers.Authorization = `Bearer ${token}`;
+  
+  const response = await fetch(`${API_BASE}${url}`, {
+    ...options,
+    headers,
+    credentials: 'include'
   });
-  if (!res.ok) {
-    const body = await res.json().catch(() => null);
-    throw new Error(body?.message || res.statusText);
-  }
-  const data = await res.json();
-  if (!data.accessToken) throw new Error("No access token returned");
-  // set module token immediately
-  setAccessTokenModule(data.accessToken);
-  const decoded = decodeJwt(data.accessToken);
-  return { accessToken: data.accessToken, decoded };
-}
-
-// logout asks server to revoke refresh token and clear cookie
-export async function logoutRequest() {
-  await fetch(`${API_BASE}/auth/logout`, {
-    method: "POST",
-    credentials: "include",
-  }).catch(() => {});
-  // server should clear cookie; client clears memory state elsewhere
+  
+  return response;
 }
